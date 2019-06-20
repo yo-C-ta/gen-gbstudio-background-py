@@ -1,16 +1,10 @@
 #!/usr/bin/python3
 
-
 import sys
 import json
 import csv
 import argparse
 from PIL import Image
-
-
-from pprint import pprint
-
-GRID_PIX = 8
 
 
 def genbg(config, design, outpng):
@@ -25,7 +19,7 @@ def genbg(config, design, outpng):
             continue
 
         if value.startswith("#"):
-            size = (GRID_PIX, GRID_PIX)
+            size = (config["gridsize"],) * 2
             patch = Image.new("RGBA", size, value)
         else:
             patch = Image.open(value)
@@ -38,10 +32,10 @@ def genbg(config, design, outpng):
                     field.paste(
                         region,
                         box=(
-                            x * GRID_PIX,
-                            y * GRID_PIX,
-                            x * GRID_PIX + size[0],
-                            y * GRID_PIX + size[1],
+                            x * config["gridsize"],
+                            y * config["gridsize"],
+                            x * config["gridsize"] + size[0],
+                            y * config["gridsize"] + size[1],
                         ),
                         mask=patch,
                     )
