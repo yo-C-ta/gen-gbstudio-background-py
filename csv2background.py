@@ -25,20 +25,19 @@ def genbg(config, design, outpng):
             patch = Image.open(value)
             size = (patch.width, patch.height)
 
-        for y, row in enumerate(design):
-            for x, cell in enumerate(row):
-                if cell == key:
-                    region = patch.crop(box=(0, 0, size[0], size[1]))
-                    field.paste(
-                        region,
-                        box=(
-                            x * config["gridsize"],
-                            y * config["gridsize"],
-                            x * config["gridsize"] + size[0],
-                            y * config["gridsize"] + size[1],
-                        ),
-                        mask=patch,
-                    )
+        dest = [
+            list(map(lambda p: p * config["gridsize"], (x, y)))
+            for y, row in enumerate(design)
+            for x, cell in enumerate(row)
+            if cell == key
+        ]
+        for p in dest:
+            field.paste(
+                patch.crop(box=(0, 0, size[0], size[1])),
+                box=(p[0], p[1], p[0] + size[0], p[1] + size[1]),
+                mask=patch,
+            )
+
     field.crop(
         box=(
             config["x"],
