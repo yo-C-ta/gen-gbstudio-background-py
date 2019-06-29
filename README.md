@@ -2,6 +2,12 @@
 
 This script generates a background field image according to a csv formatted field design file and config.json.
 
+## Prerequisites
+
+- Python3
+- Packages
+  - `pillow`
+
 ## Usage
 
 ```bash
