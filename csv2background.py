@@ -56,6 +56,24 @@ def genbg(config, design, outpng):
     ).save(outpng)
 
 
+def load_grid(grid_filename):
+    with open(grid_filename, 'r') as gf:
+        csv_data = [row for row in csv.reader(gf) if row]
+        row_size = len(csv_data[0])
+        for row in csv_data:
+            if len(row) != row_size:
+                print('CSV format error')
+                csv_data = None
+                break
+    return csv_data
+
+
+def load_config(config_filename):
+    with open(config_filename, 'r') as cf:
+        json_data = json.load(cf)
+    return json_data
+
+
 if __name__ == "__main__":
     ARGPARSE = argparse.ArgumentParser(
         description="Generate GB background image.")
