@@ -91,18 +91,8 @@ if __name__ == "__main__":
         help="Output png filename.",
     )
     ARGS = ARGPARSE.parse_args()
-
-    with open(ARGS.json, "r") as jf:
-        jsonData = json.load(jf)
-
-    with open(ARGS.csv, "r") as cf:
-        csvData = [row for row in csv.reader(cf) if row]
-        for row in csvData:
-            if len(row) != len(csvData[0]):
-                print("CSV format error.")
-                csvData = None
-                break
-
+    csvData = load_grid(ARGS.csv)
+    jsonData = load_config(ARGS.json)
     sys.exit(
         genbg(jsonData, csvData, ARGS.output)
     ) if jsonData and csvData else sys.exit(1)
