@@ -34,16 +34,16 @@ def genbg(config, design, outpng):
     for y, row in enumerate(design):
         for x, cell in enumerate(row):
             if cell in tiles and tiles[cell]:
-
+                tile = tiles[cell]
                 field.paste(
-                    tiles[cell].crop(box=(0, 0, tiles[cell].width, tiles[cell].height)),
+                    tile.crop(box=(0, 0, tile.width, tile.height)),
                     box=(
                         x * gridsize,
                         y * gridsize,
-                        x * gridsize + tiles[cell].width,
-                        y * gridsize + tiles[cell].height,
+                        x * gridsize + tile.width,
+                        y * gridsize + tile.height,
                     ),
-                    mask=tiles[cell],
+                    mask=tile,
                 )
 
     field.crop(
@@ -57,7 +57,8 @@ def genbg(config, design, outpng):
 
 
 if __name__ == "__main__":
-    ARGPARSE = argparse.ArgumentParser(description="Generate GB background image.")
+    ARGPARSE = argparse.ArgumentParser(
+        description="Generate GB background image.")
     ARGPARSE.add_argument(
         "csv", type=str, default=None, help="Path to field design file."
     )
