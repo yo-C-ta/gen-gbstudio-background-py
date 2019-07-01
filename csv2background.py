@@ -7,10 +7,6 @@ import argparse
 from PIL import Image
 
 
-BASECOLOR = "#e0f8cf"
-GRIDSIZE = 8
-
-
 class Configurations:
 
     GRIDSIZE = 8
@@ -21,8 +17,8 @@ class Configurations:
         self._initialize()
 
     def _initialize(self):
-        self.config['gridsize'] = GRIDSIZE
-        self.config['basecolor'] = BASECOLOR
+        self.config['gridsize'] = Configurations.GRIDSIZE
+        self.config['basecolor'] = Configurations.BASECOLOR
 
     def load_config(self, config_filename):
         with open(config_filename, 'r') as cf:
