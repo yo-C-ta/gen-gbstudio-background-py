@@ -28,20 +28,17 @@ class Configurations:
         with open(config_filename, 'r') as cf:
             json_data = json.load(cf)
             self.config.update(json_data)
+            print(self.config)
 
     def __getitem__(self, key):
         return self.config[key]
 
 
 def genbg(config, design, outpng):
-    gridsize = config["gridsize"] if "gridsize" in config else GRIDSIZE
+    gridsize = config['gridsize']
     width = gridsize * len(design[0])
     height = gridsize * len(design)
-    field = Image.new(
-        "RGBA",
-        (width, height),
-        config["basecolor"] if "basecolor" in config else BASECOLOR,
-    )
+    field = Image.new('RGBA', (width, height), config['basecolor'])
 
     tiles = {
         key: (
@@ -114,7 +111,8 @@ if __name__ == "__main__":
     )
     ARGS = ARGPARSE.parse_args()
     csvData = load_grid(ARGS.csv)
-    jsonData = load_config(ARGS.json)
+    config = Configurations()
+    config.load_config(ARGS.json)
     sys.exit(
-        genbg(jsonData, csvData, ARGS.output)
-    ) if jsonData and csvData else sys.exit(1)
+        genbg(config, csvData, ARGS.output)
+    ) if config and csvData else sys.exit(1)
