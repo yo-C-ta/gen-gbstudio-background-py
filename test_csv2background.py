@@ -32,3 +32,13 @@ def assert_loaded_config(config):
     assert layout['9'] == './sample/tiles/tree.png'
 
 
+def test_config_class_object_has_default_values():
+    config = csv2background.Configurations()
+    assert config['gridsize'] == csv2background.Configurations.GRIDSIZE
+    assert config['basecolor'] == csv2background.Configurations.BASECOLOR
+
+
+def test_load_config_by_config_class_object():
+    config = csv2background.Configurations()
+    config.load_config('sample/config.json')
+    assert_loaded_config(config)

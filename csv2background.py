@@ -11,6 +11,28 @@ BASECOLOR = "#e0f8cf"
 GRIDSIZE = 8
 
 
+class Configurations:
+
+    GRIDSIZE = 8
+    BASECOLOR = '#e0f8cf'
+
+    def __init__(self):
+        self.config = {}
+        self._initialize()
+
+    def _initialize(self):
+        self.config['gridsize'] = GRIDSIZE
+        self.config['basecolor'] = BASECOLOR
+
+    def load_config(self, config_filename):
+        with open(config_filename, 'r') as cf:
+            json_data = json.load(cf)
+            self.config.update(json_data)
+
+    def __getitem__(self, key):
+        return self.config[key]
+
+
 def genbg(config, design, outpng):
     gridsize = config["gridsize"] if "gridsize" in config else GRIDSIZE
     width = gridsize * len(design[0])
