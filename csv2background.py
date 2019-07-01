@@ -83,12 +83,6 @@ def load_grid(grid_filename):
     return csv_data
 
 
-def load_config(config_filename):
-    with open(config_filename, 'r') as cf:
-        json_data = json.load(cf)
-    return json_data
-
-
 if __name__ == "__main__":
     ARGPARSE = argparse.ArgumentParser(
         description="Generate GB background image.")

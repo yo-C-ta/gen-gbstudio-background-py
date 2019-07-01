@@ -9,11 +9,6 @@ def test_load_grid():
         assert len(row) == 32
 
 
-def test_load_config():
-    config = csv2background.load_config('sample/config.json')
-    assert_loaded_config(config)
-
-
 def assert_loaded_config(config):
     margins = config['margins']
     assert margins['top'] == 0
