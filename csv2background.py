@@ -7,6 +7,29 @@ import argparse
 from PIL import Image
 
 
+class FieldGrid:
+
+    def __init__(self):
+        self.grid = []
+        self.width = 0
+        self.height = 0
+
+    def load_field_grid(self, grid_filename):
+        with open(grid_filename, 'r') as gf:
+            self.grid = [row for row in csv.reader(gf) if row]
+            self.height = len(self.grid)
+            if self.height:
+                self.width = len(self.grid[0])
+            for row in self.grid:
+                if len(row) != self.width:
+                    print('CSV format error')
+                    self.grid = None
+                    break
+
+    def rows(self):
+        return self.grid
+
+
 class Configurations:
 
     GRIDSIZE = 8
@@ -24,29 +47,28 @@ class Configurations:
         with open(config_filename, 'r') as cf:
             json_data = json.load(cf)
             self.config.update(json_data)
-            print(self.config)
 
     def __getitem__(self, key):
         return self.config[key]
 
 
-def genbg(config, design, outpng):
+def genbg(config, field_grid, outpng):
     gridsize = config['gridsize']
-    width = gridsize * len(design[0])
-    height = gridsize * len(design)
+    width = gridsize * field_grid.width
+    height = gridsize * field_grid.height
     field = Image.new('RGBA', (width, height), config['basecolor'])
 
     tiles = {
         key: (
-            Image.new("RGBA", (gridsize,) * 2, value)
-            if value.startswith("#")
+            Image.new('RGBA', (gridsize,) * 2, value)
+            if value.startswith('#')
             else Image.open(value)
         )
-        for key, value in config["layout"].items()
+        for key, value in config['layout'].items()
         if value
     }
 
-    for y, row in enumerate(design):
+    for y, row in enumerate(field_grid.rows()):
         for x, cell in enumerate(row):
             if cell in tiles and tiles[cell]:
                 tile = tiles[cell]
@@ -63,46 +85,35 @@ def genbg(config, design, outpng):
 
     field.crop(
         box=(
-            config["margins"]["left"],
-            config["margins"]["top"],
-            width - config["margins"]["right"],
-            height - config["margins"]["bottom"],
+            config['margins']['left'],
+            config['margins']['top'],
+            width - config['margins']['right'],
+            height - config['margins']['bottom'],
         )
     ).save(outpng)
 
 
-def load_grid(grid_filename):
-    with open(grid_filename, 'r') as gf:
-        csv_data = [row for row in csv.reader(gf) if row]
-        row_size = len(csv_data[0])
-        for row in csv_data:
-            if len(row) != row_size:
-                print('CSV format error')
-                csv_data = None
-                break
-    return csv_data
-
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     ARGPARSE = argparse.ArgumentParser(
-        description="Generate GB background image.")
+        description='Generate GB background image.')
     ARGPARSE.add_argument(
-        "csv", type=str, default=None, help="Path to field design file."
+        'csv', type=str, default=None, help='Path to field grid file.'
     )
     ARGPARSE.add_argument(
-        "json", type=str, default=None, help="Path to configuration file."
+        'json', type=str, default=None, help='Path to configuration file.'
     )
     ARGPARSE.add_argument(
-        "-o",
-        "--output",
+        '-o',
+        '--output',
         type=str,
-        default="background.png",
-        help="Output png filename.",
+        default='background.png',
+        help='Output png filename.',
     )
     ARGS = ARGPARSE.parse_args()
-    csvData = load_grid(ARGS.csv)
+    field_grid = FieldGrid()
+    field_grid.load_field_grid(ARGS.csv)
     config = Configurations()
     config.load_config(ARGS.json)
     sys.exit(
-        genbg(config, csvData, ARGS.output)
-    ) if config and csvData else sys.exit(1)
+        genbg(config, field_grid, ARGS.output)
+    ) if config and field_grid else sys.exit(1)
