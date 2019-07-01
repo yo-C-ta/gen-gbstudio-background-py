@@ -22,9 +22,16 @@ see [sample](./sample/config.json)
 
 ## Tests
 
-### Behave
+### Behavior tests
 
 ```bash
 % pip install behave
 % behave
+```
+
+### Unit tests
+
+```bash
+% pip intall pytest
+% pytest
 ```
