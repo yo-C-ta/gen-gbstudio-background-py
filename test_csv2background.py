@@ -11,6 +11,10 @@ def test_load_grid():
 
 def test_load_config():
     config = csv2background.load_config('sample/config.json')
+    assert_loaded_config(config)
+
+
+def assert_loaded_config(config):
     margins = config['margins']
     assert margins['top'] == 0
     assert margins['bottom'] == 0
@@ -26,3 +30,5 @@ def test_load_config():
     assert layout['7'] == ''
     assert layout['8'] == ''
     assert layout['9'] == './sample/tiles/tree.png'
+
+
