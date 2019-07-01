@@ -25,7 +25,7 @@ def genbg(config, design, outpng):
         key: (
             Image.new("RGBA", (gridsize,) * 2, value)
             if value.startswith("#")
-            else Image.open(value)
+            else Image.open(value).convert('RGBA')
         )
         for key, value in config["layout"].items()
         if value
