@@ -2,16 +2,11 @@
 
 This script generates a background field image according to a csv formatted field design file and config.json.
 
-## Prerequisites
-
-- Python3
-- Packages
-  - `pillow`
-
 ## Usage
 
 ```bash
-python3 csv2background.py -h
+% pip install pillow
+% python3 csv2background.py -h
 ```
 
 ## config.json
@@ -24,3 +19,19 @@ see [sample](./sample/config.json)
 | layout    | meta data for field design  | M               |
 | gridsize  | image pixels per csv cell   | O (def 8)       |
 | basecolor | basecolor to fill the field | O (def #e0f8cf) |
+
+## Tests
+
+### Behavior tests
+
+```bash
+% pip install behave
+% behave
+```
+
+### Unit tests
+
+```bash
+% pip intall pytest
+% pytest
+```
